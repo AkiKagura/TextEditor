@@ -1,6 +1,5 @@
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
 
 
 class Example(QWidget):
@@ -22,9 +21,9 @@ class Example(QWidget):
 
         lbl_cb = QLabel("Choose:")
         self.cb = QComboBox()
-        self.cb.addItem("test1")
-        self.cb.addItem("test2")
-        self.cb.currentIndexChanged.connect(self.cb_changed)
+        self.cb.addItems(["Remove Duplicate"])
+        self.cb.addItem("Original")
+        # self.cb.currentIndexChanged.connect(self.cb_changed)
         hbox1.addWidget(lbl_cb)
         hbox1.addWidget(self.cb)
 
@@ -53,18 +52,25 @@ class Example(QWidget):
         self.setWindowTitle('Text Edit')
         self.show()
 
-    # 控制窗口显示在屏幕中心的方法
     def center(self):
-        # 获得窗口
         qr = self.frameGeometry()
-        # 获得屏幕中心点
         cp = QDesktopWidget().availableGeometry().center()
-        # 显示到屏幕中心
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
     def button_clicked(self):
-        self.textEdit2.setPlainText(self.textEdit1.toPlainText())
+        if self.cb.currentText() == "Remove Duplicate":
+            lst2 = []
+            lst = self.textEdit1.toPlainText().split()
+            for i in lst:
+                if i in lst2:
+                    continue
+                lst2.append(i)
+            self.textEdit2.clear()
+            for j in lst2:
+                self.textEdit2.append(j)
+        else:
+            self.textEdit2.setPlainText(self.textEdit1.toPlainText())
 
     def button_import(self):
         fname, _ = QFileDialog.getOpenFileName(self, 'Open', 'E:\\TestDatas', 'Text(*.txt)')
